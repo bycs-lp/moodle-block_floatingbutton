@@ -18,15 +18,15 @@
  * Version information for block_floatingbutton
  *
  * @package    block_floatingbutton
- * @copyright  2022-2023 ISB Bayern
+ * @copyright  2022-2025 ISB Bayern
  * @author     Stefan Hanauska <stefan.hanauska@csg-in.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->release = '0.1.3';
-$plugin->version = 2024010701;
+$plugin->release = '0.1.4';
+$plugin->version = 2025081601;
 $plugin->requires = 2022041900;
 $plugin->component = 'block_floatingbutton';
 $plugin->maturity = MATURITY_STABLE;
