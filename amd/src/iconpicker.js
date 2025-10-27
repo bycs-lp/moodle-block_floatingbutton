@@ -1,5 +1,6 @@
 import {exception as displayException} from 'core/notification';
 import Templates from 'core/templates';
+import Modal from 'core/modal';
 import ICON_SET from 'block_floatingbutton/iconset';
 
 export const init = (iconpickerclass) => {
@@ -35,38 +36,41 @@ export const init = (iconpickerclass) => {
  * @param {*} target
  * @param {*} input
  */
-function buildModal(target, input) {
-    // Build iconpicker modal with moodle modal factory
-    Templates.renderForPromise('block_floatingbutton/iconpicker', {target: target, input: input, icons: ICON_SET})
-        .then(({html}) => {
-            require(['jquery', 'core/modal_factory'], function($, ModalFactory) {
-                var trigger = $('#create-modal');
-                ModalFactory.create({
-                    title: 'Icon picker',
-                    body: html,
-                    footer: '',
-                }, trigger)
-                .done(function(modal) {
-                    modal.getRoot().on('modal:shown', function(event) {
-                        let iconpicker = event.target.querySelector('.block_floatingbutton-iconpicker');
-                        // Listeners for the icons and the search input have to be registered when modal is shown for the first
-                        // time because modal doesn't exist in the DOM before.
-                        let search = iconpicker.querySelector('.block_floatingbutton-iconpicker-search-input');
-                        search.addEventListener('input', searchicon);
-                        let icons = Array.from(iconpicker.querySelectorAll('.block_floatingbutton-iconpicker-icon'));
-                        icons.forEach(function(icon) {
-                            icon.addEventListener('click', (e) => {
-                                iconclick(e);
-                                modal.hide();
-                            });
-                        });
-                    });
-                    modal.show();
-                    highlightselected();
+async function buildModal(target, input) {
+    try {
+        // Build iconpicker modal with new modal instantiation.
+        const {html} = await Templates.renderForPromise('block_floatingbutton/iconpicker', {
+            target: target,
+            input: input,
+            icons: ICON_SET
+        });
+
+        const modal = await Modal.create({
+            title: 'Icon picker',
+            body: html,
+            footer: '',
+        });
+
+        modal.getRoot().on('modal:shown', function(event) {
+            let iconpicker = event.target.querySelector('.block_floatingbutton-iconpicker');
+            // Listeners for the icons and the search input have to be registered when modal is shown for the first
+            // time because modal doesn't exist in the DOM before.
+            let search = iconpicker.querySelector('.block_floatingbutton-iconpicker-search-input');
+            search.addEventListener('input', searchicon);
+            let icons = Array.from(iconpicker.querySelectorAll('.block_floatingbutton-iconpicker-icon'));
+            icons.forEach(function(icon) {
+                icon.addEventListener('click', (e) => {
+                    iconclick(e);
+                    modal.hide();
                 });
             });
-            return true;
-        }).catch(ex => displayException(ex));
+        });
+
+        modal.show();
+        highlightselected();
+    } catch (ex) {
+        displayException(ex);
+    }
 }
 
 /**
