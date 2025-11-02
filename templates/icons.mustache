@@ -65,7 +65,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
                 {{> block_floatingbutton/edit }}
             {{/edit}}
             {{^edit}}
-                <a {{^internal}}href="{{{url}}}" {{/internal}}{{#internal}}{{^collapsed}}href="{{{url}}}" {{/collapsed}}{{/internal}} id="block_floatingbutton-{{id}}"{{#external}} target="_blank" rel="noopener noreferrer"{{/external}}>
+                <a {{^internal}}{{#url}}href="{{{url}}}"{{/url}} {{/internal}}{{#internal}}{{^collapsed}}href="{{{url}}}" {{/collapsed}}{{/internal}} id="block_floatingbutton-{{id}}"{{#external}} target="_blank" rel="noopener noreferrer"{{/external}}>
                     <div title="{{name}}" style="background-color: {{backgroundcolor}} !important; color: {{textcolor}} !important;" class="btn btn-icon icon-no-margin block_floatingbutton-btn">
                         <i class="icon {{icon}}" aria-hidden="true"></i>
                     </div>

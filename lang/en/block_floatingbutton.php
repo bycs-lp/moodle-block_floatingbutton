@@ -61,6 +61,7 @@ $string['right'] = 'Right';
 $string['speciallink'] = 'Function';
 $string['textcolor'] = 'Text';
 $string['textcolor_help'] = 'Text color for this icon (not affecting others)';
+$string['toggle_distractionfree'] = 'Toggle distraction-free mode';
 $string['top'] = 'Top';
 $string['turn_editing_on'] = 'Turn editing on/off';
 $string['type'] = 'Link type';

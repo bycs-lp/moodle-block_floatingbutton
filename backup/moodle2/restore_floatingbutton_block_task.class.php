@@ -93,6 +93,18 @@ class restore_floatingbutton_block_task extends restore_block_task {
         if ($configdata = $DB->get_field('block_instances', 'configdata', ['id' => $blockid])) {
             $config = $this->decode_configdata($configdata);
 
+            if (!isset($config->internalurl)) {
+                $config->internalurl = [];
+            }
+
+            if (!isset($config->externalurl)) {
+                $config->externalurl = [];
+            }
+
+            if (!isset($config->cmid)) {
+                $config->cmid = [];
+            }
+
             $decoder = $this->get_decoder();
             $rules = restore_course_task::define_decode_rules();
 

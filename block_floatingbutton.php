@@ -35,6 +35,7 @@ class block_floatingbutton extends block_base {
         'back_to_main_page',
         'back_to_activity_section',
         'change_editor',
+        'toggle_distractionfree',
     ];
 
     /**
@@ -272,6 +273,15 @@ class block_floatingbutton extends block_base {
                                 )
                                     )->out();
                                 $name = get_string('editorpreferences');
+                                break;
+                            case 'toggle_distractionfree':
+                                $url = null;
+                                $name = get_string('toggle_distractionfree', 'block_floatingbutton');
+                                $this->page->requires->js_call_amd(
+                                    'block_floatingbutton/distractionfree',
+                                    'init',
+                                    ['block_floatingbutton-' . $i]
+                                );
                                 break;
                         }
                 }

@@ -18,7 +18,7 @@
  * Edit form for block_floatingbutton
  *
  * @package    block_floatingbutton
- * @copyright  2022 ISB Bayern
+ * @copyright  2022-2025 ISB Bayern
  * @author     Stefan Hanauska <stefan.hanauska@csg-in.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
