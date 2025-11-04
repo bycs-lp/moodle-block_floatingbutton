@@ -45,6 +45,7 @@ $string['floatingbutton:myaddinstance'] = 'Add a floating buttons block to my mo
 $string['icon'] = 'Icon';
 $string['icon_help'] = 'FontAwesome abbreviation of the icon';
 $string['icon_missing'] = 'You have to choose an icon';
+$string['icon_picker'] = 'Icon picker';
 $string['iconsearch'] = 'Search icons';
 $string['internalurl'] = 'Section or activity';
 $string['internalurl_help'] = 'Section or activity the button should link to';

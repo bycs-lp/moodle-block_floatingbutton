@@ -1,13 +1,14 @@
 import {exception as displayException} from 'core/notification';
+import {getString} from 'core/str';
 import Templates from 'core/templates';
 import Modal from 'core/modal';
 import ICON_SET from 'block_floatingbutton/iconset';
 
 const SELECTORS = {
   iconpicker: ".block_floatingbutton-iconpicker",
-  iconpicker_input: ".block_floatingbutton-input input",
-  iconpicker_search_input: ".block_floatingbutton-iconpicker-search-input",
-  iconpicker_icon: ".block_floatingbutton-iconpicker-icon",
+  iconpickerInput: ".block_floatingbutton-input input",
+  iconpickerSearchInput: ".block_floatingbutton-iconpicker-search-input",
+  iconpickerIcon: ".block_floatingbutton-iconpicker-icon",
 };
 
 export const init = (iconpickerclass) => {
@@ -52,7 +53,7 @@ const buildModal = async(target, input) => {
         });
 
         const modal = await Modal.create({
-            title: 'Icon picker',
+            title: getString('icon_picker', 'block_floatingbutton'),
             body: html,
             footer: '',
         });
@@ -102,7 +103,7 @@ function searchicon(event) {
  * Adds class "highlight" to currently selected icon.
  */
 function highlightselected() {
-    let icons = Array.from(document.getElementsByClassName(SELECTORS.iconpicker_icon));
+    let icons = Array.from(document.querySelectorAll(SELECTORS.iconpicker_icon));
     let input = document.querySelector(SELECTORS.iconpicker).getAttribute('data-iconpicker-input');
     if (!(input === null)) {
         let iconclass = document.querySelector(`[name="${input}"]`).getAttribute('value');
