@@ -53,7 +53,7 @@ const buildModal = async(target, input) => {
         });
 
         const modal = await Modal.create({
-            title: getString('icon_picker', 'block_floatingbutton'),
+            title: await getString('icon_picker', 'block_floatingbutton'),
             body: html,
             footer: '',
         });
