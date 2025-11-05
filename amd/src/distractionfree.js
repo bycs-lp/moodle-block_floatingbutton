@@ -22,53 +22,60 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-export const init = (name) => {
-    let button = document.getElementById(name);
+import * as Storage from 'core/sessionstorage';
+
+/**
+ * Initializes the distraction-free mode toggle button.
+ *
+ * @param {string} toggleButtonId - The ID of the toggle button element.
+ * @param {Array} distractionSelectors - An array of CSS selectors for distractions to hide.
+ * @param {Array} nopaddingSelectors - An array of CSS selectors for elements to remove padding / margin from.
+ * @param {boolean} closedrawers - Whether to close open drawers.
+ */
+export const init = (toggleButtonId, distractionSelectors, nopaddingSelectors, closedrawers) => {
+    let button = document.getElementById(toggleButtonId);
     button.addEventListener('click', () => {
-        const state = sessionStorage.getItem('block_floatingbutton-distraction-free-button-state');
+        const state = Storage.get('block_floatingbutton/distraction-free-button-state');
         if (state === 'true') {
             showDistractions();
-            sessionStorage.setItem('block_floatingbutton-distraction-free-button-state', 'false');
+            Storage.set('block_floatingbutton/distraction-free-button-state', 'false');
         } else {
-            hideDistractions();
-            sessionStorage.setItem('block_floatingbutton-distraction-free-button-state', 'true');
+            hideDistractions(distractionSelectors, nopaddingSelectors, closedrawers);
+            Storage.set('block_floatingbutton/distraction-free-button-state', 'true');
         }
     });
-    const state = sessionStorage.getItem('block_floatingbutton-distraction-free-button-state');
+    const state = Storage.get('block_floatingbutton/distraction-free-button-state');
     if (state === 'true') {
-        hideDistractions();
+        hideDistractions(distractionSelectors, nopaddingSelectors, closedrawers);
     }
 };
 
 /**
  * Hides distractions on the page.
+ * @param {Array} distractionSelectors - An array of CSS selectors for distractions to hide.
+ * @param {Array} nopaddingSelectors - An array of CSS selectors for elements to remove padding / margin from.
+ * @param {boolean} closedrawers - Whether to close open drawers.
  */
-function hideDistractions() {
-    let selectors = ['nav.fixed-top', 'header', '#nav-drawer',
-        '#group_menu', 'blocks-column', '.activity-navigation',
-        '.drawer-left-toggle', '.drawer-right-toggle', 'footer',
-        '#page-header', '.secondary-navigation', 'bycs-topbar', '.mbscontentheader'
-    ];
+function hideDistractions(distractionSelectors, nopaddingSelectors, closedrawers = true) {
     let drawers = ['left', 'right'];
     drawers.forEach((s) => {
         const showdrawer = document.querySelector(`#page.show-drawer-${s}`);
-        if (showdrawer) {
+        if (showdrawer && closedrawers) {
             const toggles = document.querySelectorAll(`.drawertoggle[data-action="closedrawer"]`);
             if (toggles) {
                 toggles.forEach((toggle) => toggle.click());
             } else {
-                selectors.push(`.drawer-${s}`);
+                distractionSelectors.push(`.drawer-${s}`);
             }
         }
     });
-    selectors.forEach((s) => {
+    distractionSelectors.forEach((s) => {
         const els = document.querySelectorAll(s);
         els.forEach((el) => {
             el.classList.add('block_floatingbutton-hidden');
         });
     });
-    selectors = ['#page', '#topofscroll'];
-    selectors.forEach((s) => {
+    nopaddingSelectors.forEach((s) => {
         const els = document.querySelectorAll(s);
         els.forEach((el) => {
             el.classList.add('block_floatingbutton-nopadding');
