@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->release = '0.1.4';
-$plugin->version = 2025081601;
+$plugin->version = 2025102700;
 $plugin->requires = 2022041900;
 $plugin->component = 'block_floatingbutton';
 $plugin->supports = [401, 501];
