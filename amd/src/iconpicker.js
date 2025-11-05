@@ -18,7 +18,7 @@ export const init = (iconpickerclass) => {
     });
 
     // Make inputs of the moodle form invisible and add button for iconpicker.
-    let inputs = Array.from(document.querySelectorAll(SELECTORS.iconpicker_input));
+    let inputs = Array.from(document.querySelectorAll(SELECTORS.iconpickerInput));
     inputs.forEach(function(input) {
         input.setAttribute('style', 'visibility: collapse; width: 0; margin: 0; padding: 0; position: absolute;');
         input.insertAdjacentHTML(
@@ -52,8 +52,9 @@ const buildModal = async(target, input) => {
             icons: ICON_SET
         });
 
+        const title = await getString('icon_picker', 'block_floatingbutton');
         const modal = await Modal.create({
-            title: await getString('icon_picker', 'block_floatingbutton'),
+            title: title,
             body: html,
             footer: '',
         });
@@ -62,9 +63,9 @@ const buildModal = async(target, input) => {
             const iconpicker = event.target.querySelector(SELECTORS.iconpicker);
             // Listeners for the icons and the search input have to be registered when modal is shown for the first
             // time because modal doesn't exist in the DOM before.
-            const search = iconpicker.querySelector(SELECTORS.iconpicker_search_input);
+            const search = iconpicker.querySelector(SELECTORS.iconpickerSearchInput);
             search.addEventListener('input', searchicon);
-            const icons = Array.from(iconpicker.querySelectorAll(SELECTORS.iconpicker_icon));
+            const icons = Array.from(iconpicker.querySelectorAll(SELECTORS.iconpickerIcon));
             icons.forEach(function(icon) {
                 icon.addEventListener('click', (e) => {
                     iconclick(e);
@@ -86,8 +87,8 @@ const buildModal = async(target, input) => {
  */
 function searchicon(event) {
     let modal = event.target.closest(SELECTORS.iconpicker);
-    let search = event.target.closest(SELECTORS.iconpicker_search_input);
-    let icons = Array.from(modal.querySelectorAll(SELECTORS.iconpicker_icon));
+    let search = event.target.closest(SELECTORS.iconpickerSearchInput);
+    let icons = Array.from(modal.querySelectorAll(SELECTORS.iconpickerIcon));
     icons.forEach(function(icon) {
         if (
             icon.getAttribute('data-search').includes(search.value)
@@ -103,7 +104,7 @@ function searchicon(event) {
  * Adds class "highlight" to currently selected icon.
  */
 function highlightselected() {
-    let icons = Array.from(document.querySelectorAll(SELECTORS.iconpicker_icon));
+    let icons = Array.from(document.querySelectorAll(SELECTORS.iconpickerIcon));
     let input = document.querySelector(SELECTORS.iconpicker).getAttribute('data-iconpicker-input');
     if (!(input === null)) {
         let iconclass = document.querySelector(`[name="${input}"]`).getAttribute('value');
@@ -125,7 +126,7 @@ function iconclick(event) {
     let target = modal.getAttribute('data-iconpicker');
     let input = modal.getAttribute('data-iconpicker-input');
     if (target) {
-        let icondiv = event.target.closest(SELECTORS.iconpicker_icon);
+        let icondiv = event.target.closest(SELECTORS.iconpickerIcon);
         let iconclass = document.querySelector('#' + icondiv.id + ' i').classList;
         document.getElementById(target).innerHTML = '<i class="' + iconclass + '"></i>';
         document.querySelector(`[name="${input}"]`).setAttribute('value', iconclass);
