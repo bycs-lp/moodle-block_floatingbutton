@@ -56,7 +56,7 @@ export const init = (toggleButtonId, distractionSelectors, nopaddingSelectors, c
  * @param {Array} nopaddingSelectors - An array of CSS selectors for elements to remove padding / margin from.
  * @param {boolean} closedrawers - Whether to close open drawers.
  */
-function hideDistractions(distractionSelectors, nopaddingSelectors, closedrawers = true) {
+const hideDistractions = (distractionSelectors, nopaddingSelectors, closedrawers = true) => {
     let drawers = ['left', 'right'];
     drawers.forEach((s) => {
         const showdrawer = document.querySelector(`#page.show-drawer-${s}`);
@@ -81,15 +81,15 @@ function hideDistractions(distractionSelectors, nopaddingSelectors, closedrawers
             el.classList.add('block_floatingbutton-nopadding');
         });
     });
-}
+};
 
 /**
  * Shows distractions on the page.
  */
-function showDistractions() {
+const showDistractions = () => {
     const els = document.querySelectorAll('.block_floatingbutton-hidden, .block_floatingbutton-nopadding');
     els.forEach((el) => {
         el.classList.remove('block_floatingbutton-hidden');
         el.classList.remove('block_floatingbutton-nopadding');
     });
-}
+};

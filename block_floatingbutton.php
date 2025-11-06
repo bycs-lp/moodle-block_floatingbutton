@@ -281,17 +281,24 @@ class block_floatingbutton extends block_base {
                                     "\n",
                                     get_config('block_floatingbutton', 'distractionfreeselectors')
                                 );
-                                for ($j = 0; $j < count($distractionfreeselectors); $j++) {
-                                    $distractionfreeselectors[$j] = trim($distractionfreeselectors[$j]);
-                                }
+                                $distractionfreeselectors = array_map('trim', $distractionfreeselectors);
+                                $distractionfreeselectors = array_filter(
+                                    $distractionfreeselectors,
+                                    function ($value) {
+                                        return $value != '';
+                                    }
+                                );
                                 $nopaddingselectors = explode(
                                     "\n",
                                     get_config('block_floatingbutton', 'nopaddingselectors')
                                 );
-                                for ($j = 0; $j < count($nopaddingselectors); $j++) {
-                                    $nopaddingselectors[$j] = trim($nopaddingselectors[$j]);
-                                    ;
-                                }
+                                $nopaddingselectors = array_map('trim', $nopaddingselectors);
+                                $nopaddingselectors = array_filter(
+                                    $nopaddingselectors,
+                                    function ($value) {
+                                        return $value != '';
+                                    }
+                                );
                                 $closedrawers = !empty(get_config('block_floatingbutton', 'closedrawers'));
                                 $this->page->requires->js_call_amd(
                                     'block_floatingbutton/distractionfree',
