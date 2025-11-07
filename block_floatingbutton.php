@@ -293,12 +293,7 @@ class block_floatingbutton extends block_base {
                                     get_config('block_floatingbutton', 'nopaddingselectors')
                                 );
                                 $nopaddingselectors = array_map('trim', $nopaddingselectors);
-                                $nopaddingselectors = array_filter(
-                                    $nopaddingselectors,
-                                    function ($value) {
-                                        return $value != '';
-                                    }
-                                );
+                                $nopaddingselectors = array_filter($nopaddingselectors);
                                 $closedrawers = !empty(get_config('block_floatingbutton', 'closedrawers'));
                                 $this->page->requires->js_call_amd(
                                     'block_floatingbutton/distractionfree',
