@@ -282,12 +282,7 @@ class block_floatingbutton extends block_base {
                                     get_config('block_floatingbutton', 'distractionfreeselectors')
                                 );
                                 $distractionfreeselectors = array_map('trim', $distractionfreeselectors);
-                                $distractionfreeselectors = array_filter(
-                                    $distractionfreeselectors,
-                                    function ($value) {
-                                        return $value != '';
-                                    }
-                                );
+                                $distractionfreeselectors = array_filter($distractionfreeselectors);
                                 $nopaddingselectors = explode(
                                     "\n",
                                     get_config('block_floatingbutton', 'nopaddingselectors')
