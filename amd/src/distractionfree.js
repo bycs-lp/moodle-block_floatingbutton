@@ -35,8 +35,8 @@ import * as Storage from 'core/sessionstorage';
 export const init = (toggleButtonId, distractionSelectors, nopaddingSelectors, closedrawers) => {
     let button = document.getElementById(toggleButtonId);
     button.addEventListener('click', () => {
-        const state = Storage.get('block_floatingbutton/distraction-free-button-state');
-        if (state === 'true') {
+        const someHiddenElement = document.querySelector('.block_floatingbutton-hidden, .block_floatingbutton-nopadding');
+        if (someHiddenElement) {
             showDistractions();
             Storage.set('block_floatingbutton/distraction-free-button-state', 'false');
         } else {
