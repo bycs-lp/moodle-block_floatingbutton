@@ -2,9 +2,11 @@
     position: fixed;
     bottom: calc(2rem + 36px);
     right: 2rem;
-    width: 36px;
+    width: calc(16px + 1rem);
     transition: 0.2s;
     z-index: 1000;
+    /* eslint-disable no-important */
+    visibility: visible !important;
 }
 
 .drawer-right.show .block_floatingbutton-floatingicons,
@@ -86,4 +88,17 @@
 .block_floatingbutton-color-input input[type="color"] {
     width: 2.5em;
     padding: 0;
+}
+
+/* eslint-disable no-important */
+.block_floatingbutton-hidden {
+    display: none !important;
+}
+
+.block_floatingbutton-nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: unset !important;
+    min-height: 100% !important;
+    width: 100% !important;
 }

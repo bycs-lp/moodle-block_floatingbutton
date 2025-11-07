@@ -35,6 +35,7 @@ class block_floatingbutton extends block_base {
         'back_to_main_page',
         'back_to_activity_section',
         'change_editor',
+        'toggle_distractionfree',
     ];
 
     /**
@@ -273,6 +274,28 @@ class block_floatingbutton extends block_base {
                                     )->out();
                                 $name = get_string('editorpreferences');
                                 break;
+                            case 'toggle_distractionfree':
+                                $url = null;
+                                $name = get_string('toggle_distractionfree', 'block_floatingbutton');
+                                $distractionfreeselectors = explode(
+                                    "\n",
+                                    get_config('block_floatingbutton', 'distractionfreeselectors')
+                                );
+                                $distractionfreeselectors = array_map('trim', $distractionfreeselectors);
+                                $distractionfreeselectors = array_filter($distractionfreeselectors);
+                                $nopaddingselectors = explode(
+                                    "\n",
+                                    get_config('block_floatingbutton', 'nopaddingselectors')
+                                );
+                                $nopaddingselectors = array_map('trim', $nopaddingselectors);
+                                $nopaddingselectors = array_filter($nopaddingselectors);
+                                $closedrawers = !empty(get_config('block_floatingbutton', 'closedrawers'));
+                                $this->page->requires->js_call_amd(
+                                    'block_floatingbutton/distractionfree',
+                                    'init',
+                                    ['block_floatingbutton-' . $i, $distractionfreeselectors, $nopaddingselectors, $closedrawers]
+                                );
+                                break;
                         }
                 }
                 $backgroundcolor =
@@ -327,5 +350,16 @@ class block_floatingbutton extends block_base {
      */
     public function applicable_formats(): array {
         return ['site-index' => false, 'course-view' => true, 'mod' => true];
+    }
+
+    /**
+     * Run at creation time. This block should be visible on all pages in a course by default.
+     */
+    public function instance_create() {
+        global $DB;
+        if ($this->context->get_parent_context()->contextlevel === CONTEXT_COURSE) {
+            $DB->update_record('block_instances', ['id' => $this->instance->id, 'pagetypepattern' => '*']);
+        }
+        return true;
     }
 }

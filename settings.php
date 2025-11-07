@@ -26,6 +26,23 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
+    $distractionfreeselectorsdefault = [
+        'nav.fixed-top',
+        '#nav-drawer',
+        '#group_menu',
+        'blocks-column',
+        '.activity-navigation',
+        '.drawer-left-toggle',
+        '.drawer-right-toggle',
+        'footer',
+        '.secondary-navigation',
+    ];
+
+    $nopaddingselectorsdefault = [
+        '#page',
+        '#topofscroll',
+    ];
+
     $settings->add(new admin_setting_configtext(
         'block_floatingbutton/defaulttextcolor',
         get_string('defaulttextcolor', 'block_floatingbutton'),
@@ -39,5 +56,25 @@ if ($ADMIN->fulltree) {
         '',
         '#A4A5AC',
         PARAM_TEXT
+    ));
+    $settings->add(new admin_setting_configtextarea(
+        'block_floatingbutton/distractionfreeselectors',
+        get_string('distractionfreeselectors', 'block_floatingbutton'),
+        get_string('distractionfreeselectors_desc', 'block_floatingbutton'),
+        implode("\n", $distractionfreeselectorsdefault),
+        PARAM_TEXT
+    ));
+    $settings->add(new admin_setting_configtextarea(
+        'block_floatingbutton/nopaddingselectors',
+        get_string('nopaddingselectors', 'block_floatingbutton'),
+        get_string('nopaddingselectors_desc', 'block_floatingbutton'),
+        implode("\n", $nopaddingselectorsdefault),
+        PARAM_TEXT
+    ));
+    $settings->add(new admin_setting_configcheckbox(
+        'block_floatingbutton/closedrawers',
+        get_string('close_drawers', 'block_floatingbutton'),
+        get_string('close_drawers_desc', 'block_floatingbutton'),
+        1
     ));
 }
