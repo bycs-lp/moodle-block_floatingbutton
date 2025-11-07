@@ -351,4 +351,15 @@ class block_floatingbutton extends block_base {
     public function applicable_formats(): array {
         return ['site-index' => false, 'course-view' => true, 'mod' => true];
     }
+
+    /**
+     * Run at creation time. This block should be visible on all pages in a course by default.
+     */
+    public function instance_create() {
+        global $DB;
+        if ($this->context->get_parent_context()->contextlevel === CONTEXT_COURSE) {
+            $DB->update_record('block_instances', ['id' => $this->instance->id, 'pagetypepattern' => '*']);
+        }
+        return true;
+    }
 }
