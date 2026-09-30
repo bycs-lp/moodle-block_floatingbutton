@@ -221,10 +221,17 @@ class block_floatingbutton extends block_base {
                         }
                         break;
                     case 'external':
-                        $url = $this->config->externalurl[$i];
+                        $url = clean_param($this->config->externalurl[$i], PARAM_URL);
+                        $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+                        if (!in_array($scheme, ['http', 'https'], true)) {
+                            $url = null;
+                            break;
+                        }
                         // Be aware that stripos returns 0 in most cases when wwwroot is found
                         // as it is in the first position of the url.
                         $external = stripos($url, $CFG->wwwroot) === false;
+                        // The template prints the url raw, like the escaped moodle_url output of the other link types.
+                        $url = s($url);
                         break;
                     case 'special':
                         switch ($this->config->speciallink[$i]) {
