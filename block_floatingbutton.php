@@ -178,7 +178,7 @@ class block_floatingbutton extends block_base {
                                     if (in_array($id, array_keys($modinfo->get_cms()))) {
                                         $module = $modinfo->get_cm($id);
                                         $name = $module->name;
-                                        $notavailable = !$module->available;
+                                        $notavailable = !$module->uservisible;
                                         $section = $module->sectionnum;
                                         $internal = true;
                                         // Call get_url() so at least once obtain_dynamic_data() is called.
@@ -208,7 +208,7 @@ class block_floatingbutton extends block_base {
                                                 $name = get_string('section') . ' ' . $id;
                                             }
                                         }
-                                        $notavailable = !$sectioninfo->available;
+                                        $notavailable = !$sectioninfo->uservisible;
                                         $url = $format->get_view_url($id);
                                         $internal = true;
                                         $anchor = 'section-' . $id;
