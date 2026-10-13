@@ -24,6 +24,7 @@ namespace block_floatingbutton;
  * @author     Dr. Peter Mayer
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[\PHPUnit\Framework\Attributes\CoversMethod(\block_floatingbutton::class, 'get_content')]
 final class block_floatingbutton_test extends \advanced_testcase {
     /**
      * Renders a floating button block with a single external link.
@@ -56,7 +57,6 @@ final class block_floatingbutton_test extends \advanced_testcase {
         return block_instance('floatingbutton', $record, $page)->content->text;
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('baseline')]
     /**
      * A javascript: url configured as external link must not reach the href attribute.
      *
@@ -72,7 +72,6 @@ final class block_floatingbutton_test extends \advanced_testcase {
         $this->assertStringNotContainsString('javascript:', $html);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('baseline')]
     /**
      * An https url configured as external link is rendered escaped in the href attribute.
      *
@@ -86,5 +85,97 @@ final class block_floatingbutton_test extends \advanced_testcase {
 
         $this->assertStringContainsString('href="https://example.org/page?a=1&amp;b=2"', $html);
         $this->assertStringContainsString('target="_blank"', $html);
+    }
+
+    /**
+     * Buttons pointing at activities hidden from the user are not rendered.
+     *
+     * @covers \block_floatingbutton::get_content
+     */
+    public function test_get_content_hides_invisible_activities(): void {
+        global $CFG;
+        require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
+        require_once($CFG->dirroot . '/blocks/floatingbutton/block_floatingbutton.php');
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $hidden = $generator->create_module('page', ['course' => $course->id, 'name' => 'Hidden page', 'visible' => 0]);
+        $visible = $generator->create_module('page', ['course' => $course->id, 'name' => 'Visible page']);
+        $student = $generator->create_and_enrol($course, 'student');
+        $teacher = $generator->create_and_enrol($course, 'editingteacher');
+        $config = (object) [
+            'icon_number' => 2,
+            'icon' => ['fa-eye', 'fa-star'],
+            'type' => ['internal', 'internal'],
+            'cmid' => ['cmid=' . $hidden->cmid, 'cmid=' . $visible->cmid],
+            'name' => ['', ''],
+            'customlayout' => [0, 0],
+            'defaultbackgroundcolor' => '#000000',
+            'defaulttextcolor' => '#ffffff',
+        ];
+        $render = function (\stdClass $user) use ($course, $config): string {
+            $this->setUser($user);
+            $page = new \moodle_page();
+            $page->set_course($course);
+            $page->set_url('/course/view.php', ['id' => $course->id]);
+            $block = new \block_floatingbutton();
+            $block->page = $page;
+            $block->config = $config;
+            $block->get_content();
+            return $block->content->text;
+        };
+
+        $studenttext = $render($student);
+        $this->assertStringNotContainsString('Hidden page', $studenttext);
+        $this->assertStringContainsString('Visible page', $studenttext);
+
+        $this->assertStringContainsString('Hidden page', $render($teacher));
+    }
+
+    /**
+     * Buttons pointing at sections hidden from the user are not rendered.
+     *
+     * @covers \block_floatingbutton::get_content
+     */
+    public function test_get_content_hides_invisible_sections(): void {
+        global $CFG;
+        require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
+        require_once($CFG->dirroot . '/blocks/floatingbutton/block_floatingbutton.php');
+        require_once($CFG->dirroot . '/course/lib.php');
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course(['numsections' => 2]);
+        $modinfo = get_fast_modinfo($course);
+        course_update_section($course, $modinfo->get_section_info(1), ['name' => 'Visible section']);
+        course_update_section($course, $modinfo->get_section_info(2), ['name' => 'Hidden section', 'visible' => 0]);
+        $student = $generator->create_and_enrol($course, 'student');
+        $teacher = $generator->create_and_enrol($course, 'editingteacher');
+        $config = (object) [
+            'icon_number' => 2,
+            'icon' => ['fa-eye', 'fa-star'],
+            'type' => ['internal', 'internal'],
+            'cmid' => ['section=2', 'section=1'],
+            'name' => ['', ''],
+            'customlayout' => [0, 0],
+            'defaultbackgroundcolor' => '#000000',
+            'defaulttextcolor' => '#ffffff',
+        ];
+        $render = function (\stdClass $user) use ($course, $config): string {
+            $this->setUser($user);
+            $page = new \moodle_page();
+            $page->set_course($course);
+            $page->set_url('/course/view.php', ['id' => $course->id]);
+            $block = new \block_floatingbutton();
+            $block->page = $page;
+            $block->config = $config;
+            $block->get_content();
+            return $block->content->text;
+        };
+
+        $studenttext = $render($student);
+        $this->assertStringNotContainsString('Hidden section', $studenttext);
+        $this->assertStringContainsString('Visible section', $studenttext);
+
+        $this->assertStringContainsString('Hidden section', $render($teacher));
     }
 }
